@@ -5,10 +5,8 @@ module.exports = {
     extend: {
       screens: {
         sm: "375px",
-        sml: "667px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
+        sml: "415px",
+        md: "768px"
       },
       fontFamily: {
         nunito: ["Nunito", "sans-serif"],
