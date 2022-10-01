@@ -5,7 +5,7 @@ const Registration = () => {
   return (
     <div className="flex px-2.5 md:px-0">
       <div className="sml:w-1/2 flex flex-col items-end sml:mr-[69px] justify-center ">
-        <div className="md:w-[520px]">
+        <div className="xl:w-[530px]">
           <h2 className="font-nunito font-bold sml:text-[18px] sm:text-center sm:mt-3.5 md:text-left text-4xl text-primary">
             Get started with easily register
           </h2>

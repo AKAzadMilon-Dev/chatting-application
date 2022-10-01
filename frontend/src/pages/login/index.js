@@ -5,13 +5,13 @@ import { FcGoogle } from "react-icons/fc";
 const Login = () => {
   return (
     <div className="flex px-2.5 md:px-0">
-      <div className="md:w-1/2 flex flex-col items-end md:mr-[69px] md:mt-16 sm:mt-10 ">
-        <div className="md:w-[530px]">
-          <h2 className=" font-nunito font-bold md:text-4xl text-primary sm:text-3xl">
+      <div className="sml:w-1/2 flex flex-col items-end sml:mr-[69px] mx-auto justify-center ">
+        <div className="xl:w-[530px]">
+          <h2 className=" font-nunito font-bold md:!text-4xl text-primary sm:text-3xl sm:mt-6 sm:text-center sml:mt-10 md:text-left sml:text-[26px]">
             Login to your account!
           </h2>
           <button
-            className=" font-nunito font-semibold text-sm flex flex-row border border-solid rounded-lg items-center py-3 pr-5 md:mt-12 sm:mt-6"
+            className=" font-nunito font-semibold text-sm flex flex-row border border-solid rounded-lg items-center py-3 pr-5 md:mt-12 sm:mt-6 mx-auto md:mx-0 "
             type="submit"
           >
             <FcGoogle className="ml-3 mr-1" />
@@ -36,7 +36,7 @@ const Login = () => {
             </div>
           </div>
           <button
-            className=" w-full font-nunito font-semibold text-xl text-white md:px-[122px] sm:px-[80px] py-5 bg-btn rounded-lg md:mt-14 sm:mt-10"
+            className=" w-full font-nunito font-semibold text-xl text-white md:px-[122px] sml:px-[50px] sm:px-[80px] py-5 bg-btn rounded-lg md:mt-14 sm:mt-10"
             type="submit"
           >
             Login to Continue
@@ -49,10 +49,10 @@ const Login = () => {
           </p>
         </div>
       </div>
-      <div className="w-1/2 hidden sml:block">
+      <div className="sml:w-1/2 hidden sml:block">
         <picture>
           <img
-            className="w-full h-screen object-cover"
+            className="w-full sml:h-full md:!h-screen object-cover"
             src="assets/images/login.webp"
             leading="lazy"
           />

@@ -6,7 +6,7 @@ module.exports = {
       screens: {
         sm: "375px",
         sml: "415px",
-        md: "768px"
+        md: "768px",
       },
       fontFamily: {
         nunito: ["Nunito", "sans-serif"],
