@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
 
 const Registration = () => {
   const [fullName, setFullName] = useState("");
@@ -8,6 +9,7 @@ const Registration = () => {
   const [fullNameError, setFullNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleFullName = (e) => {
     setFullName(e.target.value);
@@ -76,6 +78,10 @@ const Registration = () => {
     }
   };
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="flex px-2.5 md:px-0">
       <div className="sml:w-1/2 flex flex-col items-end sml:mr-[69px] justify-center ">
@@ -120,12 +126,25 @@ const Registration = () => {
             <div className="relative">
               <input
                 className="w-full border border-solid border-primary rounded-lg sml:p-4 sm:p-3.5 md:py-6 md:px-12 sm:mt-8 sml:mt-8 outline-none"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 onChange={handlePassword}
               />
               <p className="absolute sm:top-5 sml:top-5 left-9 bg-white px-4">
                 Password
               </p>
+
+              {showPassword ? (
+                <RiEyeLine
+                  onClick={handleShowPassword}
+                  className="absolute top-[53px] right-[14px]"
+                />
+              ) : (
+                <RiEyeCloseLine
+                  onClick={handleShowPassword}
+                  className="absolute top-[53px] right-[14px]"
+                />
+              )}
+
               {passwordError && (
                 <p className="font-nunito font-normal text-sm text-red-500 pt-3">
                   {passwordError}
