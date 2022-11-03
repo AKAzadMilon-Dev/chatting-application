@@ -12,7 +12,7 @@ module.exports = {
         nunito: ["Nunito", "sans-serif"],
       },
       colors:{
-        primary: "#11175D",
+        primary: "#151515",
         btn: "#5F35F5"
       }
     },
