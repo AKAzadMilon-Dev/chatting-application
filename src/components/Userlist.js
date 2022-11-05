@@ -4,7 +4,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 const Userlist = () => {
   return (
-    <div className="p-2.5 w-[344px] rounded-xl shadow-md drop-shadow-md">
+    <div className="p-2.5 w-[344px] rounded-xl shadow-md drop-shadow-md mt-[90px]">
       <div className="flex justify-between items-center px-3">
         <h1 className="font-semibold font-nunito text-lg">User List</h1>
         <BiDotsVerticalRounded className="text-lg" />

@@ -1,11 +1,11 @@
 import React from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 
-const Friends = () => {
+const MyGroups = () => {
   return (
-    <div className="p-2.5 w-[344px] rounded-xl shadow-md drop-shadow-md mt-[90px]">
+    <div className="p-2.5 w-[344px] rounded-xl shadow-md drop-shadow-md mt-[48px]">
       <div className="flex justify-between items-center px-3">
-        <h1 className="font-semibold font-nunito text-lg ">Friends List</h1>
+        <h1 className="font-semibold font-nunito text-lg ">My Groups</h1>
         <BiDotsVerticalRounded className="text-lg" />
       </div>
       <div className="h-[347px] overflow-x-auto px-2.5">
@@ -176,4 +176,4 @@ const Friends = () => {
   );
 };
 
-export default Friends;
+export default MyGroups;
