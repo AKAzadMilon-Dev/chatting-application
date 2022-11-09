@@ -3,7 +3,7 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 
 const Friendsrequist = () => {
   return (
-    <div className="p-3 w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
+    <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
       <div className="flex justify-between items-center px-3">
         <h1 className="font-semibold font-nunito text-lg">Friends Request</h1>
         <BiDotsVerticalRounded className="text-lg" />

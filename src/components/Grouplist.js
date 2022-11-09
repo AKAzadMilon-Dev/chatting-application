@@ -3,9 +3,9 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 
 const Grouplist = () => {
   return (
-    <div className="p-3 w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
+    <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
       <div className="flex justify-between items-center px-3">
-        <h1 className="font-semibold font-nunito text-lg">Group List</h1>
+        <h1 className="font-semibold font-nunito text-lg">Groups List</h1>
         <BiDotsVerticalRounded className="text-lg" />
       </div>
       <div className="h-[347px] overflow-x-auto px-2.5">

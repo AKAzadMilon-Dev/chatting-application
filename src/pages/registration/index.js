@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Registration = () => {
+  const auth = getAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -75,6 +77,22 @@ const Registration = () => {
       if (!isValidLength.test(password)) {
         setPasswordError("Password must be 8-16 Characters Long.");
       }
+    }
+    if (
+      fullName &&
+      email &&
+      password &&
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+    ) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          console.log("registration Done")
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode)
+        });
     }
   };
 
