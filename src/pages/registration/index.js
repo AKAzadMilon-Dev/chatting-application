@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification, updateProfile
+} from "firebase/auth";
 
 const Registration = () => {
   const auth = getAuth();
@@ -13,6 +17,7 @@ const Registration = () => {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [firebaseError, setFirebaseError] = useState("");
+  const [success, setSuccess] = useState("")
 
   const handleFullName = (e) => {
     setFullName(e.target.value);
@@ -85,8 +90,20 @@ const Registration = () => {
       /^.{8,16}$/.test(password)
     ) {
       createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          console.log("registration Done");
+        .then((user) => {
+          updateProfile(auth.currentUser, {
+            displayName: fullName,
+            photoURL: "assets/images.profile.png"
+
+          }).then(() => {
+            console.log(user)
+            sendEmailVerification(auth.currentUser).then(() => {
+              setSuccess("Registration Successfully!. Please Varify your email!.")
+            });
+          }).catch((error) => {
+            console.log(error)
+          });
+          
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -114,6 +131,11 @@ const Registration = () => {
           {firebaseError && (
             <p className="font-nunito font-normal text-sm text-red-500 pt-3">
               {firebaseError}
+            </p>
+          )}
+          {success && (
+            <p className="font-nunito font-normal text-sm text-green-500 pt-3">
+              {success}
             </p>
           )}
           <div className="flex flex-col">
