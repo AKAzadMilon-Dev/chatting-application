@@ -12,6 +12,7 @@ const Registration = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [firebaseError, setFirebaseError] = useState("");
 
   const handleFullName = (e) => {
     setFullName(e.target.value);
@@ -48,33 +49,26 @@ const Registration = () => {
     if (!password) {
       setPasswordError("Password is required!");
     } else {
-      const isWhitespace = /^(?=.*\s)/;
-      const isContainsUppercase = /^(?=.*[A-Z])/;
-      const isContainsLowercase = /^(?=.*[a-z])/;
-      const isContainsNumber = /^(?=.*[0-9])/;
-      const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])/;
-      const isValidLength = /^.{8,16}$/;
-
-      if (isWhitespace.test(password)) {
+      if (/^(?=.*\s)/.test(password)) {
         setPasswordError("Password must not contain Whitespaces.");
       }
-      if (!isContainsUppercase.test(password)) {
+      if (!/^(?=.*[A-Z])/.test(password)) {
         setPasswordError(
           "Password must have at least one Uppercase Character."
         );
       }
-      if (!isContainsLowercase.test(password)) {
+      if (!/^(?=.*[a-z])/.test(password)) {
         setPasswordError(
           "Password must have at least one Lowercase Character."
         );
       }
-      if (!isContainsNumber.test(password)) {
+      if (!/^(?=.*[0-9])/.test(password)) {
         setPasswordError("Password must contain at least one Digit.");
       }
-      if (!isContainsSymbol.test(password)) {
+      if (!/^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])/.test(password)) {
         setPasswordError("Password must contain at least one Special Symbol.");
       }
-      if (!isValidLength.test(password)) {
+      if (!/^.{8,16}$/.test(password)) {
         setPasswordError("Password must be 8-16 Characters Long.");
       }
     }
@@ -82,16 +76,23 @@ const Registration = () => {
       fullName &&
       email &&
       password &&
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
+      !/^(?=.*\s)/.test(password) &&
+      /^(?=.*[A-Z])/.test(password) &&
+      /^(?=.*[a-z])/.test(password) &&
+      /^(?=.*[0-9])/.test(password) &&
+      /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])/.test(password) &&
+      /^.{8,16}$/.test(password)
     ) {
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-          console.log("registration Done")
+          console.log("registration Done");
         })
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode)
+          if (errorCode.includes("auth/email-already-in-use")) {
+            setFirebaseError("This email already in used");
+          }
         });
     }
   };
@@ -110,6 +111,11 @@ const Registration = () => {
           <p className="font-nunito font-normal sm:text-center sml:text-center md:!text-left sm:mt-2 sm:text-sm sml:text-sm md:text-xl text-primary md:mt-3 sml-mt-14">
             Free register and you can enjoy it
           </p>
+          {firebaseError && (
+            <p className="font-nunito font-normal text-sm text-red-500 pt-3">
+              {firebaseError}
+            </p>
+          )}
           <div className="flex flex-col">
             <div className="relative">
               <input
