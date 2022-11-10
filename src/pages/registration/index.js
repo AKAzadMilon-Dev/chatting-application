@@ -4,11 +4,15 @@ import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  sendEmailVerification, updateProfile
+  sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 
 const Registration = () => {
   const auth = getAuth();
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +21,8 @@ const Registration = () => {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [firebaseError, setFirebaseError] = useState("");
-  const [success, setSuccess] = useState("")
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFullName = (e) => {
     setFullName(e.target.value);
@@ -89,21 +94,28 @@ const Registration = () => {
       /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])/.test(password) &&
       /^.{8,16}$/.test(password)
     ) {
+      setLoading(true);
       createUserWithEmailAndPassword(auth, email, password)
         .then((user) => {
           updateProfile(auth.currentUser, {
             displayName: fullName,
-            photoURL: "assets/images.profile.png"
-
-          }).then(() => {
-            console.log(user)
-            sendEmailVerification(auth.currentUser).then(() => {
-              setSuccess("Registration Successfully!. Please Varify your email!.")
+            photoURL: "assets/images.profile.png",
+          })
+            .then(() => {
+              console.log(user);
+              sendEmailVerification(auth.currentUser).then(() => {
+                setLoading(false);
+                setSuccess(
+                  "Registration Successfully!. Please Varify your email!."
+                );
+                setTimeout(() => {
+                  navigate("/login");
+                }, 1000);
+              });
+            })
+            .catch((error) => {
+              console.log(error);
             });
-          }).catch((error) => {
-            console.log(error)
-          });
-          
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -198,13 +210,26 @@ const Registration = () => {
               )}
             </div>
           </div>
-          <button
-            className="w-full font-nunito font-semibold text-xl text-white sml:px-[100px] sm:py-3.5 sml:py-5 bg-btn rounded-[86px] sm:mt-8 sml:mt-10"
-            type="submit"
-            onClick={handleSignup}
-          >
-            Sign up
-          </button>
+          {loading ? (
+            <div className="mt-10 flex justify-center ">
+              <RotatingLines
+              strokeColor="green"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="100"
+              visible={true}
+            />
+            </div>
+          ) : (
+            <button
+              className="w-full font-nunito font-semibold text-xl text-white sml:px-[100px] sm:py-3.5 sml:py-5 bg-btn rounded-[86px] sm:mt-8 sml:mt-10"
+              type="submit"
+              onClick={handleSignup}
+            >
+              Sign up
+            </button>
+          )}
+
           <p className="font-nunito font-semibold text-sm flex justify-center text-[#03014C] my-[36px]">
             Already have an account ?{" "}
             <Link className=" font-bold text-[#EA6C00]" to="/login">
