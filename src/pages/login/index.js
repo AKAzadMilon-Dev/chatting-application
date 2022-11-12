@@ -45,8 +45,6 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((user) => {
         toast("Login Successfully!");
-
-        // setSuccess("");
         setTimeout(() => {
           setLoading(false);
           navigate("/");

@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
+import { ToastContainer, toast } from "react-toastify";
 
 const Registration = () => {
   const auth = getAuth();
@@ -105,9 +106,7 @@ const Registration = () => {
               console.log(user);
               sendEmailVerification(auth.currentUser).then(() => {
                 setLoading(false);
-                setSuccess(
-                  "Registration Successfully!. Please Varify your email!."
-                );
+                toast("Registration Successfully!. Please Varify your email!.");
                 setTimeout(() => {
                   navigate("/login");
                 }, 1000);
@@ -132,6 +131,18 @@ const Registration = () => {
 
   return (
     <div className="flex px-2.5 md:px-0">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="sml:w-1/2 flex flex-col items-end sml:mr-[69px] justify-center ">
         <div className="xl:w-[530px]">
           <h2 className="font-nunito font-bold sml:text-[18px] sm:text-center sm:mt-3.5 md:text-left text-4xl text-primary">
@@ -213,12 +224,12 @@ const Registration = () => {
           {loading ? (
             <div className="mt-10 flex justify-center ">
               <RotatingLines
-              strokeColor="green"
-              strokeWidth="5"
-              animationDuration="0.75"
-              width="100"
-              visible={true}
-            />
+                strokeColor="green"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="100"
+                visible={true}
+              />
             </div>
           ) : (
             <button
