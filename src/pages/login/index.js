@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,6 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 const Login = () => {
   const auth = getAuth();
   const navigate = useNavigate();
+  const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -66,6 +72,12 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleGoogleLogin = ()=>{
+    signInWithPopup(auth, provider).then(()=>{
+      navigate("/");
+    })
+  }
+
   return (
     <div className="flex px-2.5 md:px-0">
       <ToastContainer
@@ -88,6 +100,7 @@ const Login = () => {
           <button
             className=" font-nunito font-semibold text-sm flex flex-row border border-solid rounded-lg items-center py-3 pr-5 md:mt-12 sm:mt-6 mx-auto md:mx-0 "
             type="submit"
+            onClick={handleGoogleLogin}
           >
             <FcGoogle className="ml-3 mr-1" />
             Login with Google
