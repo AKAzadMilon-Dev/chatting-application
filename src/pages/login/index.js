@@ -224,7 +224,7 @@ const Login = () => {
       </div>
       {/* Forgot Password Modal */}
       {show && (
-        <div className="w-full h-screen bg-primary flex justify-center items-center fixed">
+        <div className="w-full h-screen bg-primary bg-opacity-70 flex justify-center items-center fixed">
           <div className="p-5 bg-white rounded-md">
             <h1 className=" font-nunito font-bold text-xl text-center ">
               Forgot Password

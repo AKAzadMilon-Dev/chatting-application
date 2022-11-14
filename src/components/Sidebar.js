@@ -3,8 +3,19 @@ import { BiHome } from "react-icons/bi";
 import { BiMessageRoundedDots } from "react-icons/bi";
 import { MdOutlineNotifications, MdOutlineLogout } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({active}) => {
+const Sidebar = ({ active }) => {
+  const auth = getAuth();
+  const navigate = useNavigate();
+
+  const handleSignout = () => {
+    signOut(auth).then(() => {
+      navigate('/login')
+    });
+  };
+
   return (
     <div className="w-full bg-primary xl:rounded-[20px] xl:py-9 xl:px-11 overflow-x-hidden flex xl:flex-col p-2.5 xl:p-0 gap-[20px] xl:gap-0 justify-between mb-2.5 xl:mb-0">
       <img
@@ -41,9 +52,12 @@ const Sidebar = ({active}) => {
             }`}
           />
         </div>
-        <MdOutlineNotifications className="text-2xl xl:text-4xl text-white " />
-        <AiOutlineSetting className="text-2xl xl:text-4xl text-white " />
-        <MdOutlineLogout className="text-2xl xl:text-4xl text-white xl:mt-[140px] xl:mb-10" />
+        <MdOutlineNotifications className="text-2xl xl:text-4xl text-white cursor-pointer" />
+        <AiOutlineSetting className="text-2xl xl:text-4xl text-white cursor-pointer" />
+        <MdOutlineLogout
+          onClick={handleSignout}
+          className="text-2xl xl:text-4xl text-white xl:mt-[140px] xl:mb-10 cursor-pointer"
+        />
       </div>
     </div>
   );
