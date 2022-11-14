@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
@@ -24,6 +25,8 @@ const Login = () => {
   const [firebaseError, setFirebaseError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState("");
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -57,6 +60,7 @@ const Login = () => {
         }, 1000);
       })
       .catch((error) => {
+        setLoading(false);
         const errorCode = error.code;
         console.log(errorCode);
         if (errorCode.includes("auth/user-not-found")) {
@@ -72,11 +76,21 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleGoogleLogin = ()=>{
-    signInWithPopup(auth, provider).then(()=>{
+  const handleGoogleLogin = () => {
+    signInWithPopup(auth, provider).then(() => {
       navigate("/");
-    })
-  }
+    });
+  };
+
+  const handleForgotPassword = () => {
+    sendPasswordResetEmail(auth, forgotPassword).then(() => {
+      toast("Please chack your email!");
+      setTimeout(() => {
+        setLoading(false);
+        setShow(false);
+      }, 1000);
+    });
+  };
 
   return (
     <div className="flex px-2.5 md:px-0">
@@ -182,11 +196,20 @@ const Login = () => {
             </button>
           )}
 
-          <p className="font-nunito font-semibold text-sm text-[#03014C] mt-[36px] mb-16">
+          <p className="font-nunito font-semibold text-sm text-[#03014C] mt-[36px]">
             Don’t have an account ?{" "}
             <Link className=" font-bold text-[#EA6C00]" to="/registration">
               Sign up
             </Link>
+          </p>
+          <p className="font-nunito font-semibold text-sm text-[#03014C] mt-[36px] text-center">
+            <button
+              onClick={() => setShow(!show)}
+              className=" font-bold text-[#EA6C00]"
+              to="/forgotpassword"
+            >
+              Forgot Password?
+            </button>
           </p>
         </div>
       </div>
@@ -199,6 +222,53 @@ const Login = () => {
           />
         </picture>
       </div>
+      {/* Forgot Password Modal */}
+      {show && (
+        <div className="w-full h-screen bg-primary flex justify-center items-center fixed">
+          <div className="p-5 bg-white rounded-md">
+            <h1 className=" font-nunito font-bold text-xl text-center ">
+              Forgot Password
+            </h1>
+            <div>
+              <input
+                onChange={(e) => setForgotPassword(e.target.value)}
+                className="w-full border border-solid border-primary rounded-lg sml:p-4 sm:p-3.5 md:py-6 md:px-12 sm:mt-8 sml:mt-8 outline-none"
+                type="email"
+                placeholder="Email address"
+              />
+              <div className="flex justify-between gap-10">
+                {loading ? (
+                  <div className="mt-10 flex justify-center ">
+                    <RotatingLines
+                      strokeColor="green"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="100"
+                      visible={true}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleForgotPassword}
+                    className=" font-nunito font-semibold text-xl text-white p-3 bg-btn rounded-xl sm:mt-8 sml:mt-10"
+                    type="submit"
+                  >
+                    Change Password
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setShow(false)}
+                  className=" font-nunito font-semibold text-xl text-white p-3 bg-[#FF1E1E] rounded-xl sm:mt-8 sml:mt-10"
+                  type="submit"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

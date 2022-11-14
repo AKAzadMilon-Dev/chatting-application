@@ -13,7 +13,8 @@ module.exports = {
       },
       colors:{
         primary: "#151515",
-        btn: "#5F35F5"
+        btn: "#5F35F5",
+        gradian:"rgb(115 115 115 / .5)"
       }
     },
   },
