@@ -19,11 +19,12 @@ const Sidebar = ({ active }) => {
   return (
     <div className="w-full bg-primary xl:rounded-[20px] xl:py-9 xl:px-11 overflow-x-hidden flex xl:flex-col p-2.5 xl:p-0 gap-[20px] xl:gap-0 justify-between mb-2.5 xl:mb-0">
       <img
-        className="w-12 h-12 xl:w-26 xl:h-26 rounded xl:mb-20  "
+        className=" xl:w-26 xl:h-26 rounded-[50%]   "
         src="assets/images/profileimg.png"
         alt="profileimg"
       />
-      <div className="flex xl:flex-col items-center gap-x-6 xl:gap-y-20 ">
+      <h1 className="font-bold font-nunito text-center text-xl text-white">{auth.currentUser.displayName}</h1>
+      <div className="flex xl:flex-col items-center gap-x-6 xl:gap-y-20 xl:mt-20 ">
         <div
           className={`${
             active == "home" &&

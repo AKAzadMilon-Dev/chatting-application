@@ -100,7 +100,7 @@ const Registration = () => {
         .then((user) => {
           updateProfile(auth.currentUser, {
             displayName: fullName,
-            photoURL: "assets/images.profile.png",
+            photoURL: "assets/images.profile1.jpg",
           })
             .then(() => {
               console.log(user);
