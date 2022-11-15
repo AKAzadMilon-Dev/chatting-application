@@ -6,7 +6,7 @@ import { getAuth } from "firebase/auth";
 
 const Userlist = () => {
   const db = getDatabase();
-  const auth = getAuth()
+  const auth = getAuth();
 
   const [userslist, setUserslist] = useState([]);
 
@@ -16,7 +16,9 @@ const Userlist = () => {
       const arr = [];
 
       snapshot.forEach((item) => {
-        arr.push(item.val());
+        if (item.key !== auth.currentUser.uid) {
+          arr.push(item.val());
+        }
       });
       setUserslist(arr);
     });
