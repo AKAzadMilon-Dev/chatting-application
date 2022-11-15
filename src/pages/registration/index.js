@@ -10,8 +10,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { ToastContainer, toast } from "react-toastify";
+import { getDatabase, ref, set } from "firebase/database";
 
 const Registration = () => {
+  const db = getDatabase();
   const auth = getAuth();
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
@@ -100,17 +102,28 @@ const Registration = () => {
         .then((user) => {
           updateProfile(auth.currentUser, {
             displayName: fullName,
-            photoURL: "assets/images.profile1.jpg",
+            photoURL: "assets/images/profile.png",
           })
             .then(() => {
-              console.log(user);
-              sendEmailVerification(auth.currentUser).then(() => {
-                setLoading(false);
-                toast("Registration Successfully!. Please Varify your email!.");
-                setTimeout(() => {
-                  navigate("/login");
-                }, 1000);
-              });
+              sendEmailVerification(auth.currentUser)
+                .then(() => {
+                  setLoading(false);
+                  toast(
+                    "Registration Successfully!. Please Varify your email!."
+                  );
+                })
+                .then(() => {
+                  set(ref(db, "users/" + user.user.uid), {
+                    username: user.user.displayName,
+                    email: user.user.email,
+                    photoURL: user.user.photoURL,
+                  });
+                })
+                .then(() => {
+                  setTimeout(() => {
+                    navigate("/login");
+                  }, 2000);
+                });
             })
             .catch((error) => {
               console.log(error);
