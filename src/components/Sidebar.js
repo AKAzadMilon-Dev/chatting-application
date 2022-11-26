@@ -1,28 +1,75 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { BiHome } from "react-icons/bi";
 import { BiMessageRoundedDots } from "react-icons/bi";
 import { MdOutlineNotifications, MdOutlineLogout } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
+import { FaUpload } from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import "cropperjs/dist/cropper.css";
+import Cropper from "react-cropper";
 
 const Sidebar = ({ active }) => {
   const auth = getAuth();
   const navigate = useNavigate();
 
+  const [show, setShow] = useState(false);
+  const [img, setImg] = useState("");
+  const [previewimg, setPreviewimg] = useState("");
+
+  const cropperRef = useRef(null);
+
+  const onCrop = () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    setPreviewimg(cropper.getCroppedCanvas().toDataURL());
+  };
+
   const handleSignout = () => {
     signOut(auth).then(() => {
-      navigate('/login')
+      navigate("/login");
     });
+  };
+
+  const handleImageUpload = () => {
+    setShow(!show);
+    setImg("");
+    setPreviewimg("");
+  };
+
+  const handleImageSelect = (e) => {
+    console.log(e.target.files[0].name);
+
+    let files;
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImg(reader.result);
+    };
+    reader.readAsDataURL(files[0]);
   };
 
   return (
     <div className="w-full bg-primary xl:rounded-[20px] xl:py-9 xl:px-11 overflow-x-hidden flex xl:flex-col p-2.5 xl:p-0 gap-[20px] xl:gap-0 justify-between mb-2.5 xl:mb-0">
-      <img
-        className=" xl:w-26 xl:h-26 rounded-[50%]   "
-        src={auth.currentUser.photoURL}
-      />
-      <h1 className="font-bold font-nunito text-center text-xl text-white">{auth.currentUser.displayName}</h1>
+      <div className="relative xl:w-[96px] xl:h-[96px] overflow-hidden group">
+        <img
+          className=" xl:w-[96px] xl:h-[96px] rounded-[50%] "
+          src={auth.currentUser.photoURL}
+        />
+        <div
+          className=" xl:w-[40px] xl:h-[40px] cursor-pointer flex justify-center items-center absolute bottom-[-5px] right-[30px] hidden group-hover:flex"
+          onClick={handleImageUpload}
+        >
+          <FaUpload className="text-white text-[25px]" />
+        </div>
+      </div>
+      <h1 className="font-bold font-nunito text-center text-xl text-gray-300">
+        {auth.currentUser.displayName}
+      </h1>
       <div className="flex xl:flex-col items-center gap-x-6 xl:gap-y-20 xl:mt-20 ">
         <div
           className={`${
@@ -59,6 +106,60 @@ const Sidebar = ({ active }) => {
           className="text-2xl xl:text-4xl text-white xl:mt-[140px] xl:mb-10 cursor-pointer"
         />
       </div>
+      {/* Image Upload modal */}
+      {show && (
+        <div className="w-full h-screen bg-primary flex justify-center items-center fixed z-[999] top-0 left-0">
+          <div className="p-5 bg-white rounded-md">
+            <h1 className=" font-nunito font-bold text-xl text-center ">
+              Image Upload
+            </h1>
+
+            <div>
+              {previewimg ? (
+                <img
+                  className=" xl:w-[96px] xl:h-[96px] rounded-[50%] mb-5 "
+                  src={previewimg}
+                />
+              ) : (
+                <img
+                  className=" xl:w-[96px] xl:h-[96px] rounded-[50%] mb-5 "
+                  src={auth.currentUser.photoURL}
+                />
+              )}
+              <Cropper
+                src={img}
+                style={{ height: 300, width: 300 }}
+                // Cropper.js options
+                initialAspectRatio={16 / 9}
+                guides={false}
+                crop={onCrop}
+                ref={cropperRef}
+              />
+              <input
+                className="w-full border border-solid border-primary rounded-lg sml:p-4 sm:p-3.5 md:py-6 md:px-12 sm:mt-8 sml:mt-8 outline-none"
+                type="file"
+                onChange={handleImageSelect}
+              />
+              <div className="flex justify-between gap-10">
+                <button
+                  className=" font-nunito font-semibold text-xl text-white p-3 bg-btn rounded-xl sm:mt-8 sml:mt-10"
+                  type="submit"
+                >
+                  Upload
+                </button>
+
+                <button
+                  onClick={() => setShow(false)}
+                  className=" font-nunito font-semibold text-xl text-white p-3 bg-[#FF1E1E] rounded-xl sm:mt-8 sml:mt-10"
+                  type="submit"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
