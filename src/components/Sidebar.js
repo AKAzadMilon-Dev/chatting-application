@@ -8,14 +8,19 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "cropperjs/dist/cropper.css";
 import Cropper from "react-cropper";
+import { getStorage, ref, uploadString } from "firebase/storage";
 
 const Sidebar = ({ active }) => {
   const auth = getAuth();
+  const storage = getStorage();
   const navigate = useNavigate();
+  
 
   const [show, setShow] = useState(false);
   const [img, setImg] = useState("");
+  const [imgname, setImgname] = useState("");
   const [previewimg, setPreviewimg] = useState("");
+  const [cropper, setCropper] = useState();
 
   const cropperRef = useRef(null);
 
@@ -38,7 +43,7 @@ const Sidebar = ({ active }) => {
   };
 
   const handleImageSelect = (e) => {
-    console.log(e.target.files[0].name);
+    setImgname(e.target.files[0].name);
 
     let files;
     if (e.dataTransfer) {
@@ -51,6 +56,17 @@ const Sidebar = ({ active }) => {
       setImg(reader.result);
     };
     reader.readAsDataURL(files[0]);
+  };
+
+  const getCropData = () => {
+    const storageRef = ref(storage, imgname);
+    if (typeof cropper !== "undefined") {
+      cropper.getCroppedCanvas().toDataURL();
+      const message4 = cropper.getCroppedCanvas().toDataURL();
+      uploadString(storageRef, message4, "data_url").then((snapshot) => {
+        console.log("Uploaded a data_url string!");
+      });
+    }
   };
 
   return (
@@ -134,6 +150,9 @@ const Sidebar = ({ active }) => {
                 guides={false}
                 crop={onCrop}
                 ref={cropperRef}
+                onInitialized={(instance) => {
+                  setCropper(instance);
+                }}
               />
               <input
                 className="w-full border border-solid border-primary rounded-lg sml:p-4 sm:p-3.5 md:py-6 md:px-12 sm:mt-8 sml:mt-8 outline-none"
@@ -144,6 +163,7 @@ const Sidebar = ({ active }) => {
                 <button
                   className=" font-nunito font-semibold text-xl text-white p-3 bg-btn rounded-xl sm:mt-8 sml:mt-10"
                   type="submit"
+                  onClick={getCropData}
                 >
                   Upload
                 </button>
