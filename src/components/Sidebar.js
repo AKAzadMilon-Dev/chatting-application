@@ -4,17 +4,21 @@ import { BiMessageRoundedDots } from "react-icons/bi";
 import { MdOutlineNotifications, MdOutlineLogout } from "react-icons/md";
 import { AiOutlineSetting } from "react-icons/ai";
 import { FaUpload } from "react-icons/fa";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "cropperjs/dist/cropper.css";
 import Cropper from "react-cropper";
-import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
 
 const Sidebar = ({ active }) => {
   const auth = getAuth();
   const storage = getStorage();
   const navigate = useNavigate();
-  
 
   const [show, setShow] = useState(false);
   const [img, setImg] = useState("");
@@ -65,7 +69,16 @@ const Sidebar = ({ active }) => {
       const message4 = cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, "data_url").then((snapshot) => {
         getDownloadURL(storageRef).then((downloadURL) => {
-          console.log('File available at', downloadURL);
+          console.log("File available at", downloadURL);
+          updateProfile(auth.currentUser, {
+            photoURL: downloadURL,
+          })
+            .then(() => {
+              console.log("updated");
+            })
+            .catch((error) => {
+              console.log("error",error);
+            });
         });
       });
     }
