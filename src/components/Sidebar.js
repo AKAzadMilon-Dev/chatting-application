@@ -8,7 +8,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "cropperjs/dist/cropper.css";
 import Cropper from "react-cropper";
-import { getStorage, ref, uploadString } from "firebase/storage";
+import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 
 const Sidebar = ({ active }) => {
   const auth = getAuth();
@@ -64,7 +64,9 @@ const Sidebar = ({ active }) => {
       cropper.getCroppedCanvas().toDataURL();
       const message4 = cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, "data_url").then((snapshot) => {
-        console.log("Uploaded a data_url string!");
+        getDownloadURL(storageRef).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+        });
       });
     }
   };
