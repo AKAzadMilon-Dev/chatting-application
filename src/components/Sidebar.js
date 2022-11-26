@@ -14,6 +14,7 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
+import { Triangle } from "react-loader-spinner";
 
 const Sidebar = ({ active }) => {
   const auth = getAuth();
@@ -25,6 +26,7 @@ const Sidebar = ({ active }) => {
   const [imgname, setImgname] = useState("");
   const [previewimg, setPreviewimg] = useState("");
   const [cropper, setCropper] = useState();
+  const [loading, setLoading] = useState();
 
   const cropperRef = useRef(null);
 
@@ -63,6 +65,7 @@ const Sidebar = ({ active }) => {
   };
 
   const getCropData = () => {
+    setLoading(true)
     const storageRef = ref(storage, imgname);
     if (typeof cropper !== "undefined") {
       cropper.getCroppedCanvas().toDataURL();
@@ -74,10 +77,11 @@ const Sidebar = ({ active }) => {
             photoURL: downloadURL,
           })
             .then(() => {
-              console.log("updated");
+              setLoading(false)
+              setShow(false)
             })
             .catch((error) => {
-              console.log("error",error);
+              console.log("error", error);
             });
         });
       });
@@ -157,39 +161,55 @@ const Sidebar = ({ active }) => {
                   src={auth.currentUser.photoURL}
                 />
               )}
-              <Cropper
-                src={img}
-                style={{ height: 300, width: 300 }}
-                // Cropper.js options
-                initialAspectRatio={16 / 9}
-                guides={false}
-                crop={onCrop}
-                ref={cropperRef}
-                onInitialized={(instance) => {
-                  setCropper(instance);
-                }}
-              />
+              <div className="border text-center bg-primary ">
+                <Cropper
+                  src={img}
+                  style={{ height: 250, width: 250 }}
+                  // Cropper.js options
+                  initialAspectRatio={16 / 9}
+                  guides={false}
+                  crop={onCrop}
+                  ref={cropperRef}
+                  onInitialized={(instance) => {
+                    setCropper(instance);
+                  }}
+                />
+              </div>
               <input
                 className="w-full border border-solid border-primary rounded-lg sml:p-4 sm:p-3.5 md:py-6 md:px-12 sm:mt-8 sml:mt-8 outline-none"
                 type="file"
                 onChange={handleImageSelect}
               />
               <div className="flex justify-between gap-10">
-                <button
-                  className=" font-nunito font-semibold text-xl text-white p-3 bg-btn rounded-xl sm:mt-8 sml:mt-10"
-                  type="submit"
-                  onClick={getCropData}
-                >
-                  Upload
-                </button>
+                {loading ? (
+                  <Triangle
+                    height="80"
+                    width="80"
+                    color="#4fa94d"
+                    ariaLabel="triangle-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true}
+                  />
+                ) : (
+                  <>
+                    <button
+                      className=" font-nunito font-semibold text-xl text-white p-3 bg-btn rounded-xl sm:mt-8 sml:mt-10"
+                      type="submit"
+                      onClick={getCropData}
+                    >
+                      Upload
+                    </button>
 
-                <button
-                  onClick={() => setShow(false)}
-                  className=" font-nunito font-semibold text-xl text-white p-3 bg-[#FF1E1E] rounded-xl sm:mt-8 sml:mt-10"
-                  type="submit"
-                >
-                  Cancel
-                </button>
+                    <button
+                      onClick={() => setShow(false)}
+                      className=" font-nunito font-semibold text-xl text-white p-3 bg-[#FF1E1E] rounded-xl sm:mt-8 sml:mt-10"
+                      type="submit"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
