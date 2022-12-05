@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 const Friendsrequist = () => {
+  const db = getDatabase();
+  const auth = getAuth();
+
+  const [friendrequest, setFriendrequest] = useState([]);
+
+  useEffect(() => {
+    const usersRef = ref(db, "friendrequest/");
+    onValue(usersRef, (snapshot) => {
+      const arr = [];
+      snapshot.forEach((item) => {
+        if (item.val().receiverid == auth.currentUser.uid) {
+          arr.push(item.val());
+        }
+      });
+      setFriendrequest(arr);
+    });
+  }, []);
+
   return (
     <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
       <div className="flex justify-between items-center px-3">
@@ -9,279 +29,31 @@ const Friendsrequist = () => {
         <BiDotsVerticalRounded className="text-lg" />
       </div>
       <div className="h-[347px] overflow-x-auto px-2.5">
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/friendsreunion.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
+        {friendrequest.map((item) => (
+          <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5">
+            <img
+              className="w-[70px] h-[70px] rounded"
+              src="assets/images/friendsreunion.png"
+              alt="friendsreunion"
+            />
+            <div>
+              <h2 className="font-semibold font-nunito text-[14px] ">
+                {item.sendername}
+              </h2>
+              <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
+                Dinner?
+              </p>
+            </div>
+            <div>
+              <button
+                className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
+                type="submit"
+              >
+                Accept
+              </button>
+            </div>
           </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/friendsforever.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 ">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5 last:border-0">
-          <img
-            className="w-[70px] h-[70px] rounded"
-            src="assets/images/crazycousins.png"
-            alt="friendsreunion"
-          />
-          <div>
-            <h2 className="font-semibold font-nunito text-[14px] ">Raghav</h2>
-            <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
-              Dinner?
-            </p>
-          </div>
-          <div>
-            <button
-              className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
-              type="submit"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { AiOutlinePlus } from "react-icons/ai";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 const Userlist = () => {
@@ -9,6 +8,7 @@ const Userlist = () => {
   const auth = getAuth();
 
   const [userslist, setUserslist] = useState([]);
+  
 
   useEffect(() => {
     const usersRef = ref(db, "users/");
@@ -17,12 +17,23 @@ const Userlist = () => {
 
       snapshot.forEach((item) => {
         if (item.key !== auth.currentUser.uid) {
-          arr.push(item.val());
+          arr.push({ ...item.val(), id: item.key });
         }
       });
       setUserslist(arr);
     });
   }, []);
+
+  const handleFriendRequest = (item) => {
+    set(push(ref(db, "friendrequest")),{
+      sendername: auth.currentUser.displayName,
+      senderid: auth.currentUser.uid,
+      receivername: item.username,
+      receiverid: item.id
+    })
+    console.log(item);
+  };
+
   return (
     <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[90px]">
       <div className="flex justify-between items-center px-3">
@@ -42,8 +53,12 @@ const Userlist = () => {
               </p>
             </div>
             <div>
-              <button className="bg-btn p-1 rounded-md" type="submit">
-                <AiOutlinePlus className="font-bold text-[15px] text-white " />
+              <button
+                onClick={() => handleFriendRequest(item)}
+                className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
+                type="submit"
+              >
+                send request
               </button>
             </div>
           </div>
