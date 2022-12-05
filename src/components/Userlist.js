@@ -8,7 +8,7 @@ const Userlist = () => {
   const auth = getAuth();
 
   const [userslist, setUserslist] = useState([]);
-  
+  const [friend, setFriend] = useState([]);
 
   useEffect(() => {
     const usersRef = ref(db, "users/");
@@ -25,14 +25,25 @@ const Userlist = () => {
   }, []);
 
   const handleFriendRequest = (item) => {
-    set(push(ref(db, "friendrequest")),{
+    set(push(ref(db, "friendrequest")), {
       sendername: auth.currentUser.displayName,
       senderid: auth.currentUser.uid,
       receivername: item.username,
-      receiverid: item.id
-    })
-    console.log(item);
+      receiverid: item.id,
+    });
   };
+
+  useEffect(() => {
+    const friendsRef = ref(db, "friendrequest/");
+    onValue(friendsRef, (snapshot) => {
+      const friendsArr = [];
+
+      snapshot.forEach((item) => {
+        friendsArr.push(item.val().receiverid + item.val().senderid);
+      });
+      setFriend(friendsArr);
+    });
+  }, []);
 
   return (
     <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[90px]">
@@ -53,13 +64,24 @@ const Userlist = () => {
               </p>
             </div>
             <div>
+              {friend.includes(item.id+auth.currentUser.uid) || friend.includes(auth.currentUser.uid+item.id)
+              ?
               <button
+                className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
+                type="submit"
+              >
+                pending
+              </button>
+            :
+            <button
                 onClick={() => handleFriendRequest(item)}
                 className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
                 type="submit"
               >
                 send request
               </button>
+            }
+              
             </div>
           </div>
         ))}
