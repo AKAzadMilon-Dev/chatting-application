@@ -9,12 +9,12 @@ const Userlist = () => {
 
   const [userslist, setUserslist] = useState([]);
   const [friend, setFriend] = useState([]);
+  const [friendList, setFriendList] = useState([]);
 
   useEffect(() => {
     const usersRef = ref(db, "users/");
     onValue(usersRef, (snapshot) => {
       const arr = [];
-
       snapshot.forEach((item) => {
         if (item.key !== auth.currentUser.uid) {
           arr.push({ ...item.val(), id: item.key });
@@ -37,11 +37,21 @@ const Userlist = () => {
     const friendsRef = ref(db, "friendrequest/");
     onValue(friendsRef, (snapshot) => {
       const friendsArr = [];
-
       snapshot.forEach((item) => {
         friendsArr.push(item.val().receiverid + item.val().senderid);
       });
       setFriend(friendsArr);
+    });
+  }, []);
+
+  useEffect(() => {
+    const friendsRef = ref(db, "friends");
+    onValue(friendsRef, (snapshot) => {
+      const friendsArr = [];
+      snapshot.forEach((item) => {
+        friendsArr.push(item.val().receiverid + item.val().senderid);
+      });
+      setFriendList(friendsArr);
     });
   }, []);
 
@@ -64,24 +74,31 @@ const Userlist = () => {
               </p>
             </div>
             <div>
-              {friend.includes(item.id+auth.currentUser.uid) || friend.includes(auth.currentUser.uid+item.id)
-              ?
-              <button
-                className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
-                type="submit"
-              >
-                pending
-              </button>
-            :
-            <button
-                onClick={() => handleFriendRequest(item)}
-                className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
-                type="submit"
-              >
-                send request
-              </button>
-            }
-              
+              {friendList.includes(item.id + auth.currentUser.uid) ||
+              friendList.includes(auth.currentUser.uid + item.id) ? (
+                <button
+                  className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
+                  type="submit"
+                >
+                  Friends
+                </button>
+              ) : friend.includes(item.id + auth.currentUser.uid) ||
+                friend.includes(auth.currentUser.uid + item.id) ? (
+                <button
+                  className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
+                  type="submit"
+                >
+                  pending
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleFriendRequest(item)}
+                  className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[18px] text-white"
+                  type="submit"
+                >
+                  send request
+                </button>
+              )}
             </div>
           </div>
         ))}

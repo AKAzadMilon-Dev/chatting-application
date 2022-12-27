@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 const Friendsrequist = () => {
@@ -15,12 +22,27 @@ const Friendsrequist = () => {
       const arr = [];
       snapshot.forEach((item) => {
         if (item.val().receiverid == auth.currentUser.uid) {
-          arr.push(item.val());
+          arr.push({ ...item.val(), id: item.key });
         }
       });
       setFriendrequest(arr);
     });
   }, []);
+
+  const handleAcceptFriends = (item) => {
+    set(push(ref(db, "friends/")), {
+      id: item.id,
+      sendername: item.sendername,
+      senderid: item.senderid,
+      receivername: item.receivername,
+      receiverid: item.receiverid,
+      date: `${new Date().getDate()}/${
+        new Date().getMonth() + 1
+      }/${new Date().getFullYear()}`,
+    }).then(() => {
+      remove(ref(db, "friendrequest/" + item.id));
+    });
+  };
 
   return (
     <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
@@ -46,6 +68,7 @@ const Friendsrequist = () => {
             </div>
             <div>
               <button
+                onClick={() => handleAcceptFriends(item)}
                 className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
                 type="submit"
               >
