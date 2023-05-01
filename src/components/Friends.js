@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 const Friends = () => {
@@ -20,12 +20,34 @@ const Friends = () => {
         ) {
           friendsArr.push({ ...item.val(), key: item.key });
         }
-        friendsArr.push(item.val());
       });
       setFriends(friendsArr);
     });
   }, []);
-  
+
+  const handleBlock = (item)=>{
+    console.log(item)
+    auth.currentUser.uid == item.senderid
+    ?
+    set(push(ref(db, "blockusers")), {
+      block: item.receivername,
+      blockid: item.receiverid,
+      blockby: item.sendername,
+      blockbyid: item.senderid
+    }).then(()=>{
+      remove(ref(db, "friends/" + item.key))
+    })
+    :
+    set(push(ref(db, "blockusers")), {
+      block: item.sendername,
+      blockid: item.senderid,
+      blockby: item.receivername,
+      blockbyid: item.receiverid
+    }).then(()=>{
+      remove(ref(db, "friends/" + item.key))
+    })
+  }
+
   return (
     <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[90px]">
       <div className="flex justify-between items-center px-3">
@@ -57,6 +79,15 @@ const Friends = () => {
               <p className="font-medium font-nunito text-[10px] text-[#4D4D4D] ">
                 Today, 8:56pm
               </p>
+            </div>
+            <div>
+              <button
+                className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
+                type="submit"
+                onClick={()=>handleBlock(item)}
+              >
+                Block
+              </button>
             </div>
           </div>
         ))}
