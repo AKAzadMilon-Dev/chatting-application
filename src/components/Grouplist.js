@@ -35,12 +35,25 @@ const Grouplist = () => {
       const groupArr = []
       snapshot.forEach((item)=>{
         if(item.val().adminid != auth.currentUser.uid){
-          groupArr.push(item.val())
+          groupArr.push({...item.val(), groupid:item.key})
         }
       })
       setGroupList(groupArr)
     })
   },[])
+
+  const handleGroupJoin = (item)=>{
+    set(push(ref(db, "groupjoinrequest")),{
+      adminid: item.adminid,
+      groupid: item.groupid,
+      groupName: item.groupName,
+      groupTag: item.groupTag,
+      userid: auth.currentUser.uid,
+      userName: auth.currentUser.displayName,
+      userProfile: auth.currentUser.photoURL
+    })
+    console.log(item)
+  }
 
   return (
     <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
@@ -92,6 +105,7 @@ const Grouplist = () => {
           </div>
           <div>
             <button
+              onClick={()=>handleGroupJoin(item)}
               className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white hover:bg-primary"
               type="submit"
             >
