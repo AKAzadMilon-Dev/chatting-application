@@ -33,6 +33,21 @@ const BlackedUsers = () => {
     });
   }, []);
 
+  const handleUnblock = (item)=> {
+    console.log(item)
+    set(push(ref(db, "friends")),{
+      sendername: item.sendername,
+      senderid: item.senderid,
+      receivername: auth.currentUser.displayName,
+      receiverid: auth.currentUser.uid,
+      date: `${new Date().getDate()}/${
+        new Date().getMonth() + 1
+      }/${new Date().getFullYear()}`
+    }).then(() => {
+      remove(ref(db, "blockusers/" + item.id));
+    });
+  }
+
   return (
     <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[48px]">
       <div className="flex justify-between items-center px-3">
@@ -56,6 +71,7 @@ const BlackedUsers = () => {
               <div>
                 {!item.blockbyid && (
                 <button
+                  onClick={()=>handleUnblock(item)}
                   className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
                   type="submit"
                 >
