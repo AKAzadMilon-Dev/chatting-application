@@ -9,6 +9,7 @@ const BlackedUsers = () => {
   const auth = getAuth();
 
   const [blockuser, setBlockUser] = useState([]);
+  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     const blockUsersRef = ref(db, "blockusers");
