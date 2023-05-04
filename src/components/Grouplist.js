@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getDatabase,
   ref,
@@ -16,6 +16,7 @@ const Grouplist = () => {
   const [createGroup, setCreateGroup] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupTag, setGroupTag] = useState("");
+  const [groupList, setGroupList] = useState([])
 
   const handleCreateGroup = ()=>{
     set(push(ref(db, "groups")),{
@@ -28,7 +29,19 @@ const Grouplist = () => {
     })
   }
 
-  
+  useEffect(()=>{
+    const groupRef = ref(db, "groups");
+    onValue(groupRef, (snapshot)=>{
+      const groupArr = []
+      snapshot.forEach((item)=>{
+        if(item.val().adminid != auth.currentUser.uid){
+          groupArr.push(item.val())
+        }
+      })
+      setGroupList(groupArr)
+    })
+  },[])
+
   return (
     <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
       <div className="flex justify-between items-center px-3">
@@ -65,6 +78,7 @@ const Grouplist = () => {
           </button>
       </>
       :
+      groupList.map((item)=>(
       <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5">
           <img
             className="w-[70px] h-[70px] rounded"
@@ -72,8 +86,9 @@ const Grouplist = () => {
             alt="friendsreunion"
           />
           <div>
-            <h2 className="font-semibold font-nunito text-lg ">Friends Reunion</h2>
-            <p className="font-medium font-nunito text-sm text-[#4D4D4D] ">Hi Guys, Wassup!</p>
+            <h2 className="font-semibold font-nunito text-lg ">{item.groupName}</h2>
+            <p className="font-medium font-nunito text-sm text-[#4D4D4D] ">{item.groupTag}</p>
+            <p className="font-medium font-nunito text-sm text-[#4D4D4D] ">Admin: {item.adminName}</p>
           </div>
           <div>
             <button
@@ -84,6 +99,7 @@ const Grouplist = () => {
             </button>
           </div>
       </div>
+      ))
       }
       </div>
     </div>
