@@ -5,6 +5,8 @@ import {
   ref,
   onValue,
   remove,
+  set,
+  push
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
@@ -47,6 +49,21 @@ const MyGroups = () => {
     remove(ref(db, "groupjoinrequest/" + item.key))
   }
 
+  const handleMemberAccept = (item)=>{
+    set(push(ref(db, "groupaccept")),{
+      adminid: item.adminid,
+      groupName: item.groupName,
+      groupTag: item.groupTag,
+      groupid: item.groupid,
+      key: item.key,
+      userName: item.userName,
+      userProfile: item.userProfile,
+      userid: item.userid
+    }).then(()=>{
+      remove(ref(db, "groupjoinrequest/" + item.key))
+    })
+  }
+
   return (
     <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[48px]">
       <div className="flex justify-between items-center px-3">
@@ -78,6 +95,7 @@ const MyGroups = () => {
             </div>
             <div className="flex gap-x-2">
               <button
+                onClick={()=>handleMemberAccept(item)}
                 className="bg-btn px-2 rounded-md font-semibold font-nunito text-[20px] text-white hover:bg-primary"
                 type="submit"
               >
