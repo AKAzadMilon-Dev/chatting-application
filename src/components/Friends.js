@@ -15,8 +15,8 @@ const Friends = () => {
       const friendsArr = [];
       snapshot.forEach((item) => {
         if (
-          auth.currentUser.uid == item.val().receiverid ||
-          auth.currentUser.uid == item.val().senderid
+          auth.currentUser.uid === item.val().receiverid ||
+          auth.currentUser.uid === item.val().senderid
         ) {
           friendsArr.push({ ...item.val(), key: item.key });
         }
@@ -27,7 +27,7 @@ const Friends = () => {
 
   const handleBlock = (item)=>{
     console.log(item)
-    auth.currentUser.uid == item.senderid
+    auth.currentUser.uid === item.senderid
     ?
     set(push(ref(db, "blockusers")), {
       block: item.receivername,

@@ -4,8 +4,6 @@ import {
   getDatabase,
   ref,
   onValue,
-  set,
-  push,
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
@@ -23,7 +21,7 @@ const MyGroups = () => {
     onValue(groupRef, (snapshot)=>{
       const groupArr = []
       snapshot.forEach((item)=>{
-        if(item.val().adminid == auth.currentUser.uid){
+        if(item.val().adminid === auth.currentUser.uid){
           groupArr.push({...item.val(),groupid: item.key})
         }
       })
@@ -37,7 +35,7 @@ const MyGroups = () => {
     onValue(groupRef, (snapshot)=>{
       const groupArr = []
       snapshot.forEach((gitem)=>{
-        if(item.adminid == auth.currentUser.uid && item.groupid == gitem.val().groupid){
+        if(item.adminid === auth.currentUser.uid && item.groupid === gitem.val().groupid){
           groupArr.push({...gitem.val(), key:gitem.key})
         }
       })

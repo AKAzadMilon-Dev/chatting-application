@@ -5,7 +5,6 @@ import {
   onValue,
   set,
   push,
-  remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
 

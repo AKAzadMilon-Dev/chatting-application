@@ -21,7 +21,7 @@ const Friendsrequist = () => {
     onValue(usersRef, (snapshot) => {
       const arr = [];
       snapshot.forEach((item) => {
-        if (item.val().receiverid == auth.currentUser.uid) {
+        if (item.val().receiverid === auth.currentUser.uid) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
