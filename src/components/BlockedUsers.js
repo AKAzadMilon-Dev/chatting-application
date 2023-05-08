@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 const BlackedUsers = () => {
-
   const db = getDatabase();
   const auth = getAuth();
 
@@ -16,13 +22,13 @@ const BlackedUsers = () => {
     onValue(blockUsersRef, (snapshot) => {
       const blockUsersArr = [];
       snapshot.forEach((item) => {
-        if ( item.val().blockbyid == auth.currentUser.uid) {
+        if (item.val().blockbyid == auth.currentUser.uid) {
           blockUsersArr.push({
             id: item.key,
             block: item.val().block,
             blockid: item.val().blockid,
           });
-        }else{
+        } else {
           blockUsersArr.push({
             id: item.key,
             blockby: item.val().blockby,
@@ -34,56 +40,57 @@ const BlackedUsers = () => {
     });
   }, []);
 
-  const handleUnblock = (item)=> {
-    console.log(item)
-    set(push(ref(db, "friends")),{
+  const handleUnblock = (item) => {
+    console.log(item);
+    set(push(ref(db, "friends")), {
       sendername: item.sendername,
       senderid: item.senderid,
       receivername: auth.currentUser.displayName,
       receiverid: auth.currentUser.uid,
       date: `${new Date().getDate()}/${
         new Date().getMonth() + 1
-      }/${new Date().getFullYear()}`
+      }/${new Date().getFullYear()}`,
     }).then(() => {
       remove(ref(db, "blockusers/" + item.id));
     });
-  }
+  };
 
   return (
-    <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[48px]">
-      <div className="flex justify-between items-center px-3">
-        <h1 className="font-semibold font-nunito text-lg">Blocked Users</h1>
+    <div className=" mt-[48px] rounded-xl shadow-md drop-shadow-md xl:w-[344px]">
+      <div className="flex items-center justify-between px-3">
+        <h1 className="font-nunito text-lg font-semibold">Blocked Users</h1>
         <BiDotsVerticalRounded className="text-lg" />
       </div>
-        <div className="h-[347px] overflow-x-auto px-2.5">
-          {blockuser.map((item)=>(
-            <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5">
-              <img
-                className="w-[70px] h-[70px] rounded"
-                src="assets/images/user1.png"
-                alt="user1"
-              />
-              <div>
-                <h2 className="font-semibold font-nunito text-[14px] ">{item.block}</h2>
-                <p className="font-medium font-nunito text-[10px] text-[#4D4D4D] ">
-                  Today, 8:56pm
-                </p>
-              </div>
-              <div>
-                {!item.blockbyid && (
+      <div className="h-[347px] overflow-x-auto px-2.5">
+        {blockuser.map((item) => (
+          <div className="mt-5 flex items-center justify-between border-b-2 pb-2.5">
+            <img
+              className="h-[70px] w-[70px] rounded"
+              src="assets/images/user1.png"
+              alt="user1"
+            />
+            <div>
+              <h2 className="font-nunito text-[14px] font-semibold ">
+                {item.block}
+              </h2>
+              <p className="font-nunito text-[10px] font-medium text-[#4D4D4D] ">
+                Today, 8:56pm
+              </p>
+            </div>
+            <div>
+              {!item.blockbyid && (
                 <button
-                  onClick={()=>handleUnblock(item)}
-                  className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
+                  onClick={() => handleUnblock(item)}
+                  className="rounded-md bg-btn px-5 font-nunito text-[20px] font-semibold text-white"
                   type="submit"
                 >
                   unblock
                 </button>
-                )}
-              </div>
+              )}
             </div>
-          ))}
+          </div>
+        ))}
       </div>
-      
     </div>
   );
 };

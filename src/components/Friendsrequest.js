@@ -21,7 +21,7 @@ const Friendsrequist = () => {
     onValue(usersRef, (snapshot) => {
       const arr = [];
       snapshot.forEach((item) => {
-        if (item.val().receiverid === auth.currentUser.uid) {
+        if (item.val().receiverid == auth.currentUser.uid) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
@@ -45,31 +45,31 @@ const Friendsrequist = () => {
   };
 
   return (
-    <div className="xl:w-[427px] rounded-xl mt-11 shadow-md drop-shadow-md  ">
-      <div className="flex justify-between items-center px-3">
-        <h1 className="font-semibold font-nunito text-lg">Friends Request</h1>
+    <div className="mt-11 rounded-xl shadow-md drop-shadow-md xl:w-[427px]  ">
+      <div className="flex items-center justify-between px-3">
+        <h1 className="font-nunito text-lg font-semibold">Friends Request</h1>
         <BiDotsVerticalRounded className="text-lg" />
       </div>
       <div className="h-[347px] overflow-x-auto px-2.5">
         {friendrequest.map((item) => (
-          <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5">
+          <div className="mt-5 flex items-center justify-between border-b-2 pb-2.5">
             <img
-              className="w-[70px] h-[70px] rounded"
+              className="h-[70px] w-[70px] rounded"
               src="assets/images/friendsreunion.png"
               alt="friendsreunion"
             />
             <div>
-              <h2 className="font-semibold font-nunito text-[14px] ">
+              <h2 className="font-nunito text-[14px] font-semibold ">
                 {item.sendername}
               </h2>
-              <p className="font-medium font-nunito text-[12px] text-[#4D4D4D] ">
+              <p className="font-nunito text-[12px] font-medium text-[#4D4D4D] ">
                 Dinner?
               </p>
             </div>
             <div>
               <button
                 onClick={() => handleAcceptFriends(item)}
-                className="bg-btn px-5 rounded-md font-semibold font-nunito text-[20px] text-white"
+                className="rounded-md bg-btn px-5 font-nunito text-[20px] font-semibold text-white"
                 type="submit"
               >
                 Accept

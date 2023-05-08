@@ -56,20 +56,20 @@ const Userlist = () => {
   }, []);
 
   return (
-    <div className=" xl:w-[344px] rounded-xl shadow-md drop-shadow-md mt-[90px]">
-      <div className="flex justify-between items-center px-3">
-        <h1 className="font-semibold font-nunito text-lg">Users List</h1>
+    <div className=" mt-[90px] rounded-xl shadow-md drop-shadow-md xl:w-[344px]">
+      <div className="flex items-center justify-between px-3">
+        <h1 className="font-nunito text-lg font-semibold">Users List</h1>
         <BiDotsVerticalRounded className="text-lg" />
       </div>
       <div className="h-[347px] overflow-x-auto px-2.5">
         {userslist.map((item) => (
-          <div className="flex justify-between mt-5 items-center border-b-2 pb-2.5">
-            <img className="w-[70px] h-[70px] rounded" src={item.photoURL} />
+          <div className="mt-5 flex items-center justify-between border-b-2 pb-2.5">
+            <img className="h-[70px] w-[70px] rounded" src={item.photoURL} />
             <div>
-              <h2 className="font-semibold font-nunito text-[14px] ">
+              <h2 className="font-nunito text-[14px] font-semibold ">
                 {item.username}
               </h2>
-              <p className="font-medium font-nunito text-[10px] text-[#4D4D4D] ">
+              <p className="font-nunito text-[10px] font-medium text-[#4D4D4D] ">
                 {item.email}
               </p>
             </div>
@@ -77,7 +77,7 @@ const Userlist = () => {
               {friendList.includes(item.id + auth.currentUser.uid) ||
               friendList.includes(auth.currentUser.uid + item.id) ? (
                 <button
-                  className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
+                  className="rounded-md bg-btn p-[5px] font-nunito text-[20px] font-semibold text-white"
                   type="submit"
                 >
                   Friends
@@ -85,7 +85,7 @@ const Userlist = () => {
               ) : friend.includes(item.id + auth.currentUser.uid) ||
                 friend.includes(auth.currentUser.uid + item.id) ? (
                 <button
-                  className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[20px] text-white"
+                  className="rounded-md bg-btn p-[5px] font-nunito text-[20px] font-semibold text-white"
                   type="submit"
                 >
                   pending
@@ -93,7 +93,7 @@ const Userlist = () => {
               ) : (
                 <button
                   onClick={() => handleFriendRequest(item)}
-                  className="bg-btn p-[5px] rounded-md font-semibold font-nunito text-[18px] text-white"
+                  className="rounded-md bg-btn p-[5px] font-nunito text-[18px] font-semibold text-white"
                   type="submit"
                 >
                   send request

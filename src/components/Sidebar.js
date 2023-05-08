@@ -65,7 +65,7 @@ const Sidebar = ({ active }) => {
   };
 
   const getCropData = () => {
-    setLoading(true)
+    setLoading(true);
     const storageRef = ref(storage, imgname);
     if (typeof cropper !== "undefined") {
       cropper.getCroppedCanvas().toDataURL();
@@ -77,8 +77,8 @@ const Sidebar = ({ active }) => {
             photoURL: downloadURL,
           })
             .then(() => {
-              setLoading(false)
-              setShow(false)
+              setLoading(false);
+              setShow(false);
             })
             .catch((error) => {
               console.log("error", error);
@@ -89,79 +89,79 @@ const Sidebar = ({ active }) => {
   };
 
   return (
-    <div className="w-full bg-primary xl:rounded-[20px] xl:py-9 xl:px-11 overflow-x-hidden flex xl:flex-col p-2.5 xl:p-0 gap-[20px] xl:gap-0 justify-between mb-2.5 xl:mb-0">
-      <div className="relative xl:w-[96px] xl:h-[96px] overflow-hidden group">
+    <div className="mb-2.5 flex w-full justify-between gap-[20px] overflow-x-hidden bg-primary p-2.5 xl:mb-0 xl:flex-col xl:gap-0 xl:rounded-[20px] xl:p-0 xl:py-9 xl:px-11">
+      <div className="group relative overflow-hidden xl:h-[96px] xl:w-[96px]">
         <img
-          className=" xl:w-[96px] xl:h-[96px] rounded-[50%] "
+          className=" rounded-[50%] xl:h-[96px] xl:w-[96px] "
           src={auth.currentUser.photoURL}
         />
         <div
-          className=" xl:w-[40px] xl:h-[40px] cursor-pointer flex justify-center items-center absolute bottom-[-5px] right-[30px] hidden group-hover:flex"
+          className=" absolute bottom-[-5px] right-[30px] flex hidden cursor-pointer items-center justify-center group-hover:flex xl:h-[40px] xl:w-[40px]"
           onClick={handleImageUpload}
         >
-          <FaUpload className="text-white text-[25px]" />
+          <FaUpload className="text-[25px] text-white" />
         </div>
       </div>
-      <h1 className="font-bold font-nunito text-center text-xl text-gray-300">
+      <h1 className="text-center font-nunito text-xl font-bold text-gray-300">
         {auth.currentUser.displayName}
       </h1>
-      <div className="flex xl:flex-col items-center gap-x-6 xl:gap-y-20 xl:mt-20 ">
+      <div className="flex items-center gap-x-6 xl:mt-20 xl:flex-col xl:gap-y-20 ">
         <div
           className={`${
             active == "home" &&
-            "relative z-10 after:absolute after:top-0 after:right-[-35px] after:bg-[#03506F] after:rounded-l-2xl xl:after:w-[125%] after:h-full text-center flex xl:flex-col items-center after:z-[-1] xl:p-10  before:absolute before:top-0 before:right-[-35px] before:rounded-l-2xl before:bg-primary xl:before:w-[20px] before:h-full before:content-['] before:drop-shadow-md "
+            "before:content-['] relative z-10 flex items-center text-center before:absolute before:top-0 before:right-[-35px] before:h-full before:rounded-l-2xl before:bg-primary before:drop-shadow-md after:absolute after:top-0  after:right-[-35px] after:z-[-1] after:h-full after:rounded-l-2xl after:bg-[#03506F] xl:flex-col xl:p-10 xl:before:w-[20px] xl:after:w-[125%] "
           }`}
         >
           <BiHome
             className={`${
               active == "home"
-                ? "text-2xl xl:text-4xl text-[#FA7D09]"
-                : "text-2xl xl:text-4xl text-white"
+                ? "text-2xl text-[#FA7D09] xl:text-4xl"
+                : "text-2xl text-white xl:text-4xl"
             }`}
           />
         </div>
         <div
           className={`${
             active == "message" &&
-            "relative z-10 after:absolute after:top-0 after:right-[-35px] after:bg-[#03506F] after:rounded-l-2xl xl:after:w-[125%] after:h-full text-center flex xl:flex-col items-center after:z-[-1] xl:p-10  before:absolute before:top-0 before:right-[-35px] before:rounded-l-2xl before:bg-primary xl:before:w-[20px] before:h-full before:content-['] before:drop-shadow-lg "
+            "before:content-['] relative z-10 flex items-center text-center before:absolute before:top-0 before:right-[-35px] before:h-full before:rounded-l-2xl before:bg-primary before:drop-shadow-lg after:absolute after:top-0  after:right-[-35px] after:z-[-1] after:h-full after:rounded-l-2xl after:bg-[#03506F] xl:flex-col xl:p-10 xl:before:w-[20px] xl:after:w-[125%] "
           }`}
         >
           <BiMessageRoundedDots
             className={`${
               active == "message"
-                ? "text-2xl xl:text-4xl text-[#FA7D09]"
-                : "text-2xl xl:text-4xl text-white"
+                ? "text-2xl text-[#FA7D09] xl:text-4xl"
+                : "text-2xl text-white xl:text-4xl"
             }`}
           />
         </div>
-        <MdOutlineNotifications className="text-2xl xl:text-4xl text-white cursor-pointer" />
-        <AiOutlineSetting className="text-2xl xl:text-4xl text-white cursor-pointer" />
+        <MdOutlineNotifications className="cursor-pointer text-2xl text-white xl:text-4xl" />
+        <AiOutlineSetting className="cursor-pointer text-2xl text-white xl:text-4xl" />
         <MdOutlineLogout
           onClick={handleSignout}
-          className="text-2xl xl:text-4xl text-white xl:mt-[140px] xl:mb-10 cursor-pointer"
+          className="cursor-pointer text-2xl text-white xl:mt-[140px] xl:mb-10 xl:text-4xl"
         />
       </div>
       {/* Image Upload modal */}
       {show && (
-        <div className="w-full h-screen bg-primary flex justify-center items-center fixed z-[999] top-0 left-0">
-          <div className="p-5 bg-white rounded-md">
-            <h1 className=" font-nunito font-bold text-xl text-center ">
+        <div className="fixed top-0 left-0 z-[999] flex h-screen w-full items-center justify-center bg-primary">
+          <div className="rounded-md bg-white p-5">
+            <h1 className=" text-center font-nunito text-xl font-bold ">
               Image Upload
             </h1>
 
             <div>
               {previewimg ? (
                 <img
-                  className=" xl:w-[96px] xl:h-[96px] rounded-[50%] mb-5 "
+                  className=" mb-5 rounded-[50%] xl:h-[96px] xl:w-[96px] "
                   src={previewimg}
                 />
               ) : (
                 <img
-                  className=" xl:w-[96px] xl:h-[96px] rounded-[50%] mb-5 "
+                  className=" mb-5 rounded-[50%] xl:h-[96px] xl:w-[96px] "
                   src={auth.currentUser.photoURL}
                 />
               )}
-              <div className="border text-center bg-primary ">
+              <div className="border bg-primary text-center ">
                 <Cropper
                   src={img}
                   style={{ height: 250, width: 250 }}
@@ -176,7 +176,7 @@ const Sidebar = ({ active }) => {
                 />
               </div>
               <input
-                className="w-full border border-solid border-primary rounded-lg sml:p-4 sm:p-3.5 md:py-6 md:px-12 sm:mt-8 sml:mt-8 outline-none"
+                className="w-full rounded-lg border border-solid border-primary outline-none sm:mt-8 sm:p-3.5 md:py-6 md:px-12 sml:mt-8 sml:p-4"
                 type="file"
                 onChange={handleImageSelect}
               />
@@ -194,7 +194,7 @@ const Sidebar = ({ active }) => {
                 ) : (
                   <>
                     <button
-                      className=" font-nunito font-semibold text-xl text-white p-3 bg-btn rounded-xl sm:mt-8 sml:mt-10"
+                      className=" rounded-xl bg-btn p-3 font-nunito text-xl font-semibold text-white sm:mt-8 sml:mt-10"
                       type="submit"
                       onClick={getCropData}
                     >
@@ -203,7 +203,7 @@ const Sidebar = ({ active }) => {
 
                     <button
                       onClick={() => setShow(false)}
-                      className=" font-nunito font-semibold text-xl text-white p-3 bg-[#FF1E1E] rounded-xl sm:mt-8 sml:mt-10"
+                      className=" rounded-xl bg-[#FF1E1E] p-3 font-nunito text-xl font-semibold text-white sm:mt-8 sml:mt-10"
                       type="submit"
                     >
                       Cancel
